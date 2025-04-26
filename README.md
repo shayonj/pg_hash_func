@@ -5,6 +5,8 @@
 
 Determine the target partition index for an integer key according to PostgreSQL's default hash strategy, without querying the database.
 
+This gem replicates the hashing logic PostgreSQL's `hashint8extended` (for `bigint`) and `hashint4extended` (for `integer` and `smallint`) in [src/backend/access/hash/hashfunc.c](https://github.com/postgres/postgres/blob/master/src/backend/access/hash/hashfunc.c)
+
 **Supported Types:**
 
 - **`bigint` (`int8`)**: Use `PgHashFunc.calculate_partition_index_bigint`.
