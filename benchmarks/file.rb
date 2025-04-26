@@ -46,7 +46,7 @@ puts 'Warming up...'
 Benchmark.ips do |x|
   x.report('Ruby Calculation') do
     TEST_DATA.each do |key, num_partitions|
-      PgHashFunc.calculate_partition_index(
+      PgHashFunc.calculate_partition_index_bigint(
         value: key,
         num_partitions: num_partitions,
         seed: SEED,
