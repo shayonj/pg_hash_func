@@ -10,10 +10,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false # Don't cancel all jobs if one fails
+      fail-fast: false
       matrix:
-        ruby-version: ["2.7", "3.0", "3.1", "3.2", "3.3"]
-        postgres-version: ["10", "11", "12", "13", "14", "15", "16"]
+        ruby-version: ["3.0", "3.1", "3.2", "3.3"]
+        postgres-version: ["11", "12", "13", "14", "15", "16"]
+        include:
+          - ruby-version: "3.0"
+            specific_bundler_version: "2.5.10"
 
     services:
       postgres:
@@ -26,14 +29,10 @@ jobs:
           - 5432:5432
         # Set health checks to wait until postgres has started
         options: >-
-          health-cmd pg_isready
-          --host=localhost
-          --port=5432
-          --dbname=pg_hash_func_test
-          --username=postgres
-          health-interval 10s
-          health-timeout 5s
-          health-retries 5
+          --health-cmd "pg_isready --host=localhost --port=5432 --dbname=pg_hash_func_test --username=postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +41,11 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-          bundler-cache: true # runs 'bundle install' and caches installed gems
+          bundler: ${{ matrix.specific_bundler_version || 'Gemfile.lock' }}
+          cache-version: 1
+
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
 
       - name: Run RuboCop
         run: bundle exec rubocop
