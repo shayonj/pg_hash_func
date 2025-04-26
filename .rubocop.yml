@@ -1,0 +1,50 @@
+# .rubocop.yml
+
+require:
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rspec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.7
+  Exclude:
+    - "bin/console"
+    - "benchmarks/**/*"
+    - "vendor/**/*"
+    - "tmp/**/*"
+
+Style/Documentation:
+  Enabled: false
+
+Naming/MethodParameterName:
+  MinNameLength: 2
+  AllowNamesEndingInNumbers: true
+
+Layout/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 15
+  Exclude:
+    - "lib/pg_hash_func/hasher.rb"
+
+Metrics/AbcSize:
+  Max: 20
+  Exclude:
+    - "lib/pg_hash_func/hasher.rb"
+
+Metrics/BlockLength:
+  Max: 100
+  Exclude:
+    - "pg_hash_func.gemspec"
+    - "spec/**/*_spec.rb"
+
+RSpec/ExampleLength:
+  Max: 10
+
+RSpec/MultipleExpectations:
+  Max: 5
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
