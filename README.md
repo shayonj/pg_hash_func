@@ -1,4 +1,4 @@
-# PgHashFunc
+# pg_hash_func
 
 [![CI](https://github.com/shayonj/pg_hash_func/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/shayonj/pg_hash_func/actions/workflows/ci.yml)
 [![Gem Version](https://badge.fury.io/rb/pg_hash_func.svg)](https://badge.fury.io/rb/pg_hash_func)
@@ -100,7 +100,7 @@ puts "Settings for Customer=#{CUSTOMER_ID}, Type=#{SETTING_TYPE} belong to: #{pa
 # => Settings for Customer=555444333222111, Type=101 belong to: user_settings_44_0
 ```
 
-**Raw Hash Function **
+**Raw Hash Function**
 
 Access the underlying PostgreSQL `hashint8extended` function directly. Primarily useful for debugging or specific integration scenarios.
 
