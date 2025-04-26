@@ -1,5 +1,6 @@
 # PgHashFunc
 
+[![CI](https://github.com/shayonj/pg_hash_func/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/shayonj/pg_hash_func/actions/workflows/ci.yml)
 [![Gem Version](https://badge.fury.io/rb/pg_hash_func.svg)](https://badge.fury.io/rb/pg_hash_func)
 
 Determine the target partition index for an integer key according to PostgreSQL's default hash strategy, without querying the database.
@@ -16,6 +17,11 @@ Determine the target partition index for an integer key according to PostgreSQL'
 - Does not support hashing other data types (text, dates, floats, etc.).
 - Does not support other partitioning strategies (list, range).
 - Assumes PostgreSQL's standard internal seed and magic constants by default.
+
+**Compatibility:**
+
+- Ruby `>= 3.0.0`
+- PostgreSQL `>= 11` (tested up to 16)
 
 Note: PRs and support very much welcome
 
@@ -112,6 +118,23 @@ puts "Raw bigint hash for #{USER_ID}: #{raw_hash_bigint}"
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bundle exec rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`.
+
+## Releasing
+
+1.  Update the `VERSION` constant in `lib/pg_hash_func/version.rb`.
+2.  Commit the changes.
+3.  Run the release script, providing the version number:
+    ```bash
+    scripts/release.sh <VERSION>
+    # e.g., scripts/release.sh 0.1.0
+    ```
+    This script will:
+    - Build the gem.
+    - Push the gem to RubyGems.
+    - Create a git tag (e.g., `v0.1.0`).
+    - Push the tag to GitHub.
+    - Clean up the local gem file.
+4.  Create a release on GitHub using the tag created.
 
 ## Contributing
 

@@ -92,8 +92,10 @@ RSpec.describe PgHashFunc do
       context "with key=#{key}, num_partitions=#{num_partitions} (Level #{level_index + 1})" do
         it "matches PostgreSQL's partition index calculation (bigint)" do
           expected_index = get_pg_partition_index(key, num_partitions, seed, magic)
-          ruby_index = described_class.calculate_partition_index_bigint(value: key, num_partitions: num_partitions, seed: seed,
-                                                                 magic_constant: magic)
+          ruby_index = described_class.calculate_partition_index_bigint(
+            value: key, num_partitions: num_partitions,
+            seed: seed, magic_constant: magic
+          )
           expect(ruby_index).to eq(expected_index)
         end
       end
@@ -103,11 +105,11 @@ RSpec.describe PgHashFunc do
   # --- int4 Tests ---
   test_levels_data_int4.each do |levels|
     levels.each_with_index do |(key, num_partitions), level_index|
-      context "for int4 with key=#{key}, num_partitions=#{num_partitions} (Level #{level_index + 1})" do
+      context "with int4 key=#{key}, num_partitions=#{num_partitions} (Level #{level_index + 1})" do
         it "matches PostgreSQL's partition index calculation (int4)" do
           expected_index = get_pg_partition_index_int4(key, num_partitions, seed, magic)
           ruby_index = described_class.calculate_partition_index_int4(value: key, num_partitions: num_partitions,
-                                                                    seed: seed, magic_constant: magic)
+                                                                      seed: seed, magic_constant: magic)
           expect(ruby_index).to eq(expected_index)
         end
       end
@@ -116,34 +118,47 @@ RSpec.describe PgHashFunc do
 
   # Test edge case: 1 partition
   context "with num_partitions = 1" do
-    it "returns index 0" do
+    it "returns index 0 for bigint" do
       expect(described_class.calculate_partition_index_bigint(value: 12_345, num_partitions: 1, seed: seed,
-                                                       magic_constant: magic)).to eq(0)
+                                                              magic_constant: magic)).to eq(0)
       expect(described_class.calculate_partition_index_bigint(value: 0, num_partitions: 1, seed: seed,
-                                                       magic_constant: magic)).to eq(0)
+                                                              magic_constant: magic)).to eq(0)
       expect(described_class.calculate_partition_index_bigint(value: -99, num_partitions: 1, seed: seed,
-                                                       magic_constant: magic)).to eq(0)
+                                                              magic_constant: magic)).to eq(0)
+    end
+
+    it "returns index 0 for int4" do
       expect(described_class.calculate_partition_index_int4(value: 12_345, num_partitions: 1, seed: seed,
-                                                       magic_constant: magic)).to eq(0)
+                                                            magic_constant: magic)).to eq(0)
       expect(described_class.calculate_partition_index_int4(value: 0, num_partitions: 1, seed: seed,
-                                                       magic_constant: magic)).to eq(0)
+                                                            magic_constant: magic)).to eq(0)
       expect(described_class.calculate_partition_index_int4(value: -99, num_partitions: 1, seed: seed,
-                                                       magic_constant: magic)).to eq(0)
+                                                            magic_constant: magic)).to eq(0)
     end
   end
 
   # Test invalid partition count
   context "with num_partitions <= 0" do
-    it "raises ArgumentError" do
+    it "raises ArgumentError for bigint with 0 partitions" do
       expect do
         described_class.calculate_partition_index_bigint(value: 1, seed: seed, magic_constant: magic, num_partitions: 0)
       end.to raise_error(ArgumentError, /Number of partitions must be positive/)
+    end
+
+    it "raises ArgumentError for bigint with -1 partitions" do
       expect do
-        described_class.calculate_partition_index_bigint(value: 1, seed: seed, magic_constant: magic, num_partitions: -1)
+        described_class.calculate_partition_index_bigint(value: 1, seed: seed, magic_constant: magic,
+                                                         num_partitions: -1)
       end.to raise_error(ArgumentError, /Number of partitions must be positive/)
+    end
+
+    it "raises ArgumentError for int4 with 0 partitions" do
       expect do
         described_class.calculate_partition_index_int4(value: 1, seed: seed, magic_constant: magic, num_partitions: 0)
       end.to raise_error(ArgumentError, /Number of partitions must be positive/)
+    end
+
+    it "raises ArgumentError for int4 with -1 partitions" do
       expect do
         described_class.calculate_partition_index_int4(value: 1, seed: seed, magic_constant: magic, num_partitions: -1)
       end.to raise_error(ArgumentError, /Number of partitions must be positive/)

@@ -135,6 +135,5 @@ module PgHashFunc
       idx = result % num_partitions
       idx.to_i
     end
-
   end
 end

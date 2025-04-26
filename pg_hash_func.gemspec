@@ -8,7 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Shayon Mukherjee"]
   spec.email         = ["shayonj@gmail.com"]
 
-  spec.summary       = "Determine the target partition index for an integer key according to PostgreSQL's default hash strategy, without querying the database."
+  spec.summary       = "Determine the target partition index for an integer key according " \
+                       "to PostgreSQL's default hash strategy, without querying the database."
   spec.description   = <<~DESC
     Replicates PostgreSQL's default hash partitioning calculations.
     Specifically targets the logic within `hashint8extended` (for bigint)
@@ -17,7 +18,7 @@ Gem::Specification.new do |spec|
   DESC
   spec.homepage      = "https://github.com/shayonj/pg_hash_func"
   spec.license       = "MIT"
-  spec.required_ruby_version = ">= 2.7.0"
+  spec.required_ruby_version = ">= 3.0.0"
 
   if spec.respond_to?(:metadata)
     spec.metadata["homepage_uri"] = spec.homepage
