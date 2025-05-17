@@ -101,14 +101,25 @@ puts "Disconnected from PostgreSQL."
 # Warming up...
 # ruby 3.4.2 (2025-02-15 revision d2930f8e7a) +PRISM [arm64-darwin24]
 # Warming up --------------------------------------
-#     Ruby Calculation (bigint)     6.755k i/100ms
-#            SQL Query (bigint)   320.000 i/100ms
+# Ruby Calculation (bigint)
+#                          6.173k i/100ms
+#   SQL Query (bigint)   314.000 i/100ms
+# Ruby Calculation (int4)
+#                         12.411k i/100ms
+#     SQL Query (int4)   579.000 i/100ms
 # Calculating -------------------------------------
-#     Ruby Calculation (bigint)     67.103k (± 3.4%) i/s   (14.90 μs/i) -    337.750k in   5.040734s
-#            SQL Query (bigint)      3.192k (± 2.6%) i/s  (313.26 μs/i) -     16.000k in   5.016067s
+# Ruby Calculation (bigint)
+#                          61.105k (± 0.9%) i/s   (16.37 μs/i) -    308.650k in   5.051550s
+#   SQL Query (bigint)      3.133k (± 4.3%) i/s  (319.13 μs/i) -     15.700k in   5.021826s
+# Ruby Calculation (int4)
+#                         121.965k (± 1.0%) i/s    (8.20 μs/i) -    620.550k in   5.088456s
+#     SQL Query (int4)      5.949k (± 2.9%) i/s  (168.10 μs/i) -     30.108k in   5.066292s
 
 # Comparison:
-#     Ruby Calculation (bigint):    67102.7 i/s
-#            SQL Query (bigint):     3192.2 i/s - 21.02x  slower
+# Ruby Calculation (int4):   121964.6 i/s
+# Ruby Calculation (bigint):    61105.3 i/s - 2.00x  slower
+#     SQL Query (int4):     5948.9 i/s - 20.50x  slower
+#   SQL Query (bigint):     3133.5 i/s - 38.92x  slower
+
 
 # Disconnected from PostgreSQL.

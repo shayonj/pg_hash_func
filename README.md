@@ -25,7 +25,7 @@ This gem replicates the hashing logic PostgreSQL's `hashint8extended` (for `bigi
 - Ruby `>= 3.0.0`
 - PostgreSQL `>= 11` (tested up to 16)
 
-Note: PRs and support very much welcome
+Simple benchmark [here](https://github.com/shayonj/pg_hash_func/blob/main/benchmarks/file.rb#L100)
 
 ## Installation
 
