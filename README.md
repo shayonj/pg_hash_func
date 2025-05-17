@@ -3,7 +3,7 @@
 [![CI](https://github.com/shayonj/pg_hash_func/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/shayonj/pg_hash_func/actions/workflows/ci.yml)
 [![Gem Version](https://badge.fury.io/rb/pg_hash_func.svg)](https://badge.fury.io/rb/pg_hash_func)
 
-Determine the target partition index for an integer key according to PostgreSQL's default hash strategy, without querying the database.
+This gem allows your application to calculate the target partition for integer keys in PostgreSQL **hash-partitioned** tables _without_ querying the database. Typically, when querying a parent partitioned table, PostgreSQL consults catalog tables to route the query, incurring network latency and lookup costs. By replicating PostgreSQL's native hashing logic, this gem allows your application to bypass the parent table and directly derive the partition name/index, leading to significant performance gains in read-heavy, latency-sensitive workloads.
 
 This gem replicates the hashing logic PostgreSQL's `hashint8extended` (for `bigint`) and `hashint4extended` (for `integer` and `smallint`) in [src/backend/access/hash/hashfunc.c](https://github.com/postgres/postgres/blob/master/src/backend/access/hash/hashfunc.c)
 
