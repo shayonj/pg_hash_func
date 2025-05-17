@@ -120,19 +120,42 @@ module PgHashFunc
 
       hash_val = hashint8extended(value: value, seed: seed)
 
-      result = (hash_val + magic_constant) & UINT64_MASK
-      idx = result % num_partitions
+      # First, interpret the 64-bit hash as signed, matching PostgreSQL's
+      # behavior where the C function's uint64 return value is received in SQL
+      # as a signed int8.
+      signed_hash = hash_val >= 0x8000_0000_0000_0000 ? hash_val - (1 << 64) : hash_val
+
+      # Now add the magic constant in signed 64-bit arithmetic (two's-
+      # complement wrap-around). We keep the wrap-around by masking back to
+      # 64-bits as PostgreSQL does with uint64 arithmetic before the cast.
+      unsigned_sum = (signed_hash + magic_constant) & UINT64_MASK
+
+      # Cast that wrapped result back to signed 64-bit for the final modulo.
+      signed_sum = unsigned_sum >= 0x8000_0000_0000_0000 ? unsigned_sum - (1 << 64) : unsigned_sum
+
+      # Follow the expression that postgres uses internally:
+      rem = signed_sum.remainder(num_partitions)
+      idx = (rem + num_partitions) % num_partitions
       idx.to_i
     end
 
     # Calculates the target partition index for a given int4 value.
-    def self.calculate_partition_index_int4(value:, seed:, magic_constant:, num_partitions:)
+    def self.calculate_partition_index_int4(value:, seed:, num_partitions:)
       raise ArgumentError, "Number of partitions must be positive" unless num_partitions.positive?
 
       hash_val = hashint4extended(value: value, seed: seed)
 
-      result = (hash_val + magic_constant) & UINT64_MASK
-      idx = result % num_partitions
+      signed_hash = hash_val >= 0x8000_0000_0000_0000 ? hash_val - (1 << 64) : hash_val
+
+      # PostgreSQL does *not* add the partition magic constant for int2/int4
+      # hash partitioning (see get_hash_partition_greatest_modulus_int4 in the
+      # backend). Only bigint types add the magic. Therefore we skip it here.
+      unsigned_sum = signed_hash & UINT64_MASK
+
+      signed_sum = unsigned_sum >= 0x8000_0000_0000_0000 ? unsigned_sum - (1 << 64) : unsigned_sum
+
+      rem = signed_sum.remainder(num_partitions)
+      idx = (rem + num_partitions) % num_partitions
       idx.to_i
     end
   end
