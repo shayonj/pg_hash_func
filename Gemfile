@@ -10,9 +10,10 @@ group :development, :test do
   gem "benchmark-ips"
   gem "bundler"
   gem "pg"
-  gem "rake", "~> 13.0"
-  gem "rspec", "~> 3.0"
-  gem "rubocop", "~> 1.60" # Use a recent version
+  gem "pry"
+  gem "rake"
+  gem "rspec"
+  gem "rubocop"
   gem "rubocop-performance"
   gem "rubocop-rake"
   gem "rubocop-rspec"

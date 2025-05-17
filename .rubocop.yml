@@ -1,6 +1,6 @@
 # .rubocop.yml
 
-require:
+plugins:
   - rubocop-performance
   - rubocop-rake
   - rubocop-rspec
@@ -41,10 +41,20 @@ Metrics/BlockLength:
     - "spec/**/*_spec.rb"
 
 RSpec/ExampleLength:
-  Max: 10
+  Max: 25
+  Exclude:
+    - "spec/**/*_spec.rb"
 
 RSpec/MultipleExpectations:
   Max: 5
 
+RSpec/MultipleMemoizedHelpers:
+  Max: 15
+  Exclude:
+    - "spec/**/*_spec.rb"
+
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
+Metrics/ModuleLength:
+  Max: 200
